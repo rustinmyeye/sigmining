@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,18 +12,17 @@
     </style>
 </head>
 <body>
-    <h1>API Data</h1>
+    <h1>Wallet Address</h1>
+    <input type="text" id="inputString" placeholder="Enter a wallet address">
+    <button onclick="redirectToAPI()">Go</button>
     <div id="output"></div>
 
     <script>
-        // Parse URL parameters to retrieve address and data
-        var urlParams = new URLSearchParams(window.location.search);
-        var address = urlParams.get('address');
-        var data = JSON.parse(decodeURIComponent(urlParams.get('data')));
-
-        // Display the address and data on the webpage
-        document.getElementById('output').innerHTML = '<p>Address: ' + address + '</p>';
-        document.getElementById('output').innerHTML += '<p>Data: ' + JSON.stringify(data) + '</p>';
+        function redirectToAPI() {
+            var input = document.getElementById('inputString').value;
+            var apiUrl = 'http://15.204.211.130:4000/api/pools/ErgoSigmanauts/miners/' + input;
+            window.location.href = apiUrl;
+        }
     </script>
 </body>
 </html>
