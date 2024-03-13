@@ -1,1 +1,30 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Data</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Data</h1>
+    <div id="output"></div>
+
+    <script>
+        // Parse URL parameters to retrieve address and data
+        var urlParams = new URLSearchParams(window.location.search);
+        var address = urlParams.get('address');
+        var data = JSON.parse(decodeURIComponent(urlParams.get('data')));
+
+        // Display the address and data on the webpage
+        document.getElementById('output').innerHTML = '<p>Address: ' + address + '</p>';
+        document.getElementById('output').innerHTML += '<p>Data: ' + JSON.stringify(data) + '</p>';
+    </script>
+</body>
+</html>
