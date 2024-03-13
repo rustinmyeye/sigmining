@@ -15,7 +15,6 @@
     <h1>Wallet Address</h1>
     <input type="text" id="inputString" placeholder="Enter a wallet address">
     <button onclick="getData()">Go</button>
-    <div id="output"></div>
 
     <script>
         function getData() {
@@ -24,15 +23,8 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    // Extract required information
-                    var address = data.performance.workers.rustinmyeye.hashrate;
-                    var hashrate = data.performance.workers.rustinmyeye.hashrate;
-                    var time = data.performance.created;
-
-                    // Display extracted information on the webpage
-                    document.getElementById('output').innerHTML = '<p>Address: ' + address + '</p>';
-                    document.getElementById('output').innerHTML += '<p>Hashrate: ' + hashrate + '</p>';
-                    document.getElementById('output').innerHTML += '<p>Time: ' + time + '</p>';
+                    // Redirect to a new page to display the data
+                    window.location.href = 'display.html?address=' + input + '&data=' + encodeURIComponent(JSON.stringify(data));
                 })
                 .catch(error => console.error('Error:', error));
         }
