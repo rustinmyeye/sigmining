@@ -19,6 +19,7 @@
         // Parse URL parameters to retrieve address
         var urlParams = new URLSearchParams(window.location.search);
         var address = urlParams.get('address');
+        console.log('Address:', address);
 
         // Fetch data from the API
         fetch('http://15.204.211.130:4000/api/pools/ErgoSigmanauts/miners/' + address)
