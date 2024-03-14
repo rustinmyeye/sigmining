@@ -12,7 +12,6 @@
     </style>
 </head>
 <body>
-    <h1>Wallet Address</h1>
     <input type="text" id="inputString" placeholder="Enter a wallet address">
     <button onclick="redirectToAPI()">Go</button>
 
