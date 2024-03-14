@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,9 +10,9 @@
             color: white;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/confetti-js/dist/index.min.js"></script>
 </head>
 <body>
+    <h1>Wallet Address</h1>
     <input type="text" id="inputString" placeholder="Enter a wallet address">
     <button onclick="redirectToAPI()">Go</button>
 
@@ -20,18 +20,7 @@
         function redirectToAPI() {
             var input = document.getElementById('inputString').value;
             var apiUrl = 'http://15.204.211.130:4000/api/pools/ErgoSigmanauts/miners/' + input;
-            
-            // Trigger confetti animation
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-
-            // Redirect to API URL after a delay (2 seconds)
-            setTimeout(function() {
-                window.location.href = apiUrl;
-            }, 2000);
+            window.location.href = apiUrl;
         }
     </script>
 </body>
