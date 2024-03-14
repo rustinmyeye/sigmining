@@ -23,8 +23,15 @@
 
         // Fetch data from the API
         fetch('http://15.204.211.130:4000/api/pools/ErgoSigmanauts/miners/' + address)
-            .then(response => response.json())
+            .then(response => {
+                console.log('API Response Status:', response.status);
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log('API Data:', data);
                 // Display the data on the webpage
                 document.getElementById('output').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
             })
