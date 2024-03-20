@@ -3,23 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Example</title>
+    <title>Simple Sigmanaut Mining Pool Stats</title>
     <style>
         body {
             background-color: black;
             color: white;
+            font-family: Arial, sans-serif;
+        }
+        #mining-stats {
+            margin: 20px;
+        }
+        #wallet-input {
+            margin-bottom: 10px;
+            padding: 5px;
         }
     </style>
 </head>
 <body>
-    <input type="text" id="inputString" placeholder="Enter a wallet address">
-    <button onclick="redirectToAPI()">Go</button>
+    <h1>Simple Sigmanaut Mining Pool Stats</h1>
+    <div>
+        <input type="text" id="wallet-input" placeholder="Enter wallet address">
+        <button onclick="fetchMiningStats()">Go</button>
+    </div>
+    <div id="mining-stats"></div>
 
     <script>
-        function redirectToAPI() {
-            var input = document.getElementById('inputString').value;
-            var apiUrl = 'http://15.204.211.130:4000/api/pools/ErgoSigmanauts/miners/' + input;
-            window.location.href = apiUrl;
+        function fetchMiningStats() {
+            const walletAddress = document.getElementById('wallet-input').value;
+            const apiUrl = 'https://api.codetabs.com/v1/proxy/?quest=http://pool.ergo-sig-mining.net:4000/api/pools/ErgoSigmanauts/miners/';
+
+            if (walletAddress.trim() !== '') {
+                const updatedUrl = `${apiUrl}${walletAddress}`;
+                
+                fetch(updatedUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const miningStatsElement = document.getElementById('mining-stats');
+                        miningStatsElement.innerHTML = `
+                            <h2>Workers</h2>
+                            ${Object.entries(data.performance.workers).map(([workerName, workerData]) => `
+                                <h3>${workerName}</h3>
+                                Hashrate: ${formatHashrate(workerData.hashrate)}<br>
+                                Shares Per Second: ${workerData.sharesPerSecond}<br>
+                            `).join('')}
+                            <h2>Summary</h2>
+                            Last Payment: ${data.lastPayment}<br>
+                            Pending Balance: ${data.pendingBalance}<br>
+                            Pending Shares: ${data.pendingShares}<br>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching mining stats:', error);
+                    });
+            } else {
+                alert('Please enter a valid wallet address.');
+            }
+        }
+
+        function formatHashrate(hashrate) {
+            const mhPerSec = hashrate / 1000000;
+            return `${mhPerSec.toFixed(1)} MH/s`;
         }
     </script>
 </body>
