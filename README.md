@@ -18,7 +18,6 @@
     </style>
 </head>
 <body>
-    <h1>Simple Sigmanaut Mining Pool Stats</h1>
     <div>
         <input type="text" id="wallet-input" placeholder="Enter wallet address">
         <button onclick="fetchMiningStats()">Go</button>
