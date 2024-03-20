@@ -1,4 +1,3 @@
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,6 +27,17 @@
     <div id="mining-stats"></div>
 
     <script>
+        // Function to retrieve the stored wallet address from local storage
+        function getStoredWalletAddress() {
+            return localStorage.getItem('walletAddress') || '';
+        }
+
+        // Function to store the entered wallet address in local storage
+        function storeWalletAddress(walletAddress) {
+            localStorage.setItem('walletAddress', walletAddress);
+        }
+
+        // Function to fetch mining stats
         function fetchMiningStats() {
             const walletAddress = document.getElementById('wallet-input').value;
             const apiUrl = 'https://api.codetabs.com/v1/proxy/?quest=http://pool.ergo-sig-mining.net:4000/api/pools/ErgoSigmanauts/miners/';
@@ -51,6 +61,8 @@
                             Pending Balance: ${data.pendingBalance}<br>
                             Pending Shares: ${data.pendingShares}<br>
                         `;
+                        // Store the entered wallet address in local storage
+                        storeWalletAddress(walletAddress);
                     })
                     .catch(error => {
                         console.error('Error fetching mining stats:', error);
@@ -60,10 +72,14 @@
             }
         }
 
+        // Function to format hashrate
         function formatHashrate(hashrate) {
             const mhPerSec = hashrate / 1000000;
             return `${mhPerSec.toFixed(1)} MH/s`;
         }
+
+        // Set the value of the wallet input field to the stored wallet address when the page is loaded
+        document.getElementById('wallet-input').value = getStoredWalletAddress();
     </script>
 </body>
 </html>
