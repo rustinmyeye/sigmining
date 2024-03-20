@@ -2,7 +2,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Sigmanaut Mining Pool Stats</title>
     <style>
         body {
             background-color: black;
