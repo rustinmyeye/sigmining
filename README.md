@@ -78,6 +78,9 @@
 
         // Set the value of the wallet input field to the stored wallet address when the page is loaded
         document.getElementById('wallet-input').value = getStoredWalletAddress();
+
+        // Auto-update the page every 2 minutes
+        setInterval(fetchMiningStats, 2 * 60 * 1000);
     </script>
 </body>
 </html>
