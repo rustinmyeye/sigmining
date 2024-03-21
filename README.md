@@ -24,7 +24,7 @@
 <body>
     <div>
         <div id="input-title">Enter your wallet address or worker name:</div>
-        <input type="text" id="wallet-input" placeholder="Enter wallet address or worker name">
+        <input type="text" id="wallet-input" placeholder="Enter wallet address or worker name" onchange="saveInput()">
         <button onclick="fetchMiningStats()">Go</button>
     </div>
     <div id="mining-stats"></div>
@@ -118,6 +118,31 @@
                 return `${(hashrate / 1000000).toFixed(1)} MH/s`;
             }
         }
+
+        // Function to save user input to localStorage
+        function saveInput() {
+            const userInput = document.getElementById("wallet-input").value;
+            localStorage.setItem("lastInput", userInput);
+        }
+
+        // Function to load last input from localStorage
+        function loadLastInput() {
+            const lastInput = localStorage.getItem("lastInput");
+            if (lastInput) {
+                document.getElementById("wallet-input").value = lastInput;
+                fetchMiningStats(); // Automatically fetch stats based on the saved input
+            }
+        }
+
+        // Load last input when the page loads
+        window.onload = function() {
+            loadLastInput();
+        }
+
+        // Refresh the page every 2 minutes
+        setInterval(function() {
+            fetchMiningStats(); // Automatically fetch stats every 2 minutes
+        }, 120000); // 2 minutes in milliseconds
     </script>
 </body>
 </html>
