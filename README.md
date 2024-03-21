@@ -15,72 +15,109 @@
             margin-bottom: 10px;
             padding: 5px;
         }
+        #input-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
     <div>
-        <input type="text" id="wallet-input" placeholder="Enter wallet address">
+        <div id="input-title">Enter your wallet address or worker name:</div>
+        <input type="text" id="wallet-input" placeholder="Enter wallet address or worker name">
         <button onclick="fetchMiningStats()">Go</button>
     </div>
     <div id="mining-stats"></div>
 
     <script>
-        // Function to retrieve the stored wallet address from local storage
-        function getStoredWalletAddress() {
-            return localStorage.getItem('walletAddress') || '';
-        }
-
-        // Function to store the entered wallet address in local storage
-        function storeWalletAddress(walletAddress) {
-            localStorage.setItem('walletAddress', walletAddress);
-        }
-
         // Function to fetch mining stats
         function fetchMiningStats() {
-            const walletAddress = document.getElementById('wallet-input').value;
-            const apiUrl = 'https://api.codetabs.com/v1/proxy/?quest=http://pool.ergo-sig-mining.net:4000/api/pools/ErgoSigmanauts/miners/';
-
-            if (walletAddress.trim() !== '') {
-                const updatedUrl = `${apiUrl}${walletAddress}`;
-                
-                fetch(updatedUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        const miningStatsElement = document.getElementById('mining-stats');
-                        miningStatsElement.innerHTML = `
-                            <h2>Workers</h2>
-                            ${Object.entries(data.performance.workers).map(([workerName, workerData]) => `
-                                <h3>${workerName}</h3>
-                                Hashrate: ${formatHashrate(workerData.hashrate)}<br>
-                                Shares Per Second: ${workerData.sharesPerSecond}<br>
-                            `).join('')}
-                            <h2>Summary</h2>
-                            Last Payment: ${data.lastPayment}<br>
-                            Pending Balance: ${data.pendingBalance}<br>
-                            Pending Shares: ${data.pendingShares}<br>
-                        `;
-                        // Store the entered wallet address in local storage
-                        storeWalletAddress(walletAddress);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching mining stats:', error);
-                    });
+            const input = document.getElementById('wallet-input').value.trim();
+            if (input.length > 25) {
+                fetchMiningStatsForWallet(input);
             } else {
-                alert('Please enter a valid wallet address.');
+                fetchWorker(input);
             }
+        }
+
+        // Function to fetch mining stats for a wallet address
+        function fetchMiningStatsForWallet(walletAddress) {
+            const url = `https://api.codetabs.com/v1/proxy/?quest=http://pool.ergo-sig-mining.net:4000/api/pools/ErgoSigmanauts/miners/${walletAddress}`;
+            fetchAndDisplayStats(url);
+        }
+
+        // Function to fetch the list of workers and their associated wallet addresses
+        function fetchWorker(workerName) {
+            const apiUrl = 'https://api.codetabs.com/v1/proxy/?quest=http://pool.ergo-sig-mining.net:4000/api/pools/ErgoSigmanauts/miners/';
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    let found = false;
+                    data.forEach(miner => {
+                        const minerAddress = miner.miner.replace('"', '').replace('"', ''); // Extract the miner address
+                        const url = `https://api.codetabs.com/v1/proxy/?quest=http://pool.ergo-sig-mining.net:4000/api/pools/ErgoSigmanauts/miners/${minerAddress}`;
+                        fetchAndCheckWorker(url, workerName);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching worker list:', error);
+                    alert('Error fetching worker list. Please try again later.');
+                });
+        }
+
+        // Function to fetch mining stats and check for the worker name
+        function fetchAndCheckWorker(url, workerName) {
+            fetch(url)
+                .then(response => response.json())
+                .then(stats => {
+                    const workers = Object.keys(stats.performance.workers);
+                    if (workers.includes(workerName)) {
+                        displayStats(stats);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching mining stats:', error);
+                });
+        }
+
+        // Function to fetch mining stats and display them
+        function fetchAndDisplayStats(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(stats => {
+                    displayStats(stats);
+                })
+                .catch(error => {
+                    console.error('Error fetching mining stats:', error);
+                    alert('Error fetching mining stats. Please try again later.');
+                });
+        }
+
+        // Function to display mining stats
+        function displayStats(stats) {
+            const miningStatsElement = document.getElementById('mining-stats');
+            miningStatsElement.innerHTML = `
+                <h2>Worker Stats</h2>
+                ${Object.entries(stats.performance.workers).map(([workerName, workerData]) => `
+                    <h3>${workerName}</h3>
+                    Hashrate: ${formatHashrate(workerData.hashrate)}<br>
+                    Shares Per Second: ${workerData.sharesPerSecond}<br>
+                `).join('')}
+                <h2>Summary</h2>
+                Last Payment: ${stats.lastPayment}<br>
+                Pending Balance: ${stats.pendingBalance}<br>
+                Pending Shares: ${stats.pendingShares}<br>
+            `;
         }
 
         // Function to format hashrate
         function formatHashrate(hashrate) {
-            const mhPerSec = hashrate / 1000000;
-            return `${mhPerSec.toFixed(1)} MH/s`;
+            if (hashrate >= 1000000000) {
+                return `${(hashrate / 1000000000).toFixed(1)} GH/s`;
+            } else {
+                return `${(hashrate / 1000000).toFixed(1)} MH/s`;
+            }
         }
-
-        // Set the value of the wallet input field to the stored wallet address when the page is loaded
-        document.getElementById('wallet-input').value = getStoredWalletAddress();
-
-        // Auto-update the page every 2 minutes
-        setInterval(fetchMiningStats, 2 * 60 * 1000);
     </script>
 </body>
 </html>
