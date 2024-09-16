@@ -126,7 +126,7 @@
                 spinner.style.display = 'block'; // Show loading spinner
                 miningStatsElement.innerHTML = ''; // Clear previous stats
 
-                if (input.length > 25) {
+                if (input.length > 49) {
                     // Assume it's a wallet address
                     fetchMiningStatsForWallet(input);
                 } else {
