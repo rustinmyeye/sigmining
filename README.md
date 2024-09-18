@@ -98,22 +98,7 @@
 \__ \| | (_ |  _/ (_) | (_) | |__ 
 |___/___\___|_|  \___/ \___/|____|
                                    
-    </div>
-    <div id="input-title">To check your connection to the pool, enter your wallet address or worker name below:</div>
-    <input type="text" id="wallet-input" placeholder="Enter wallet address or worker name">
-    <button onclick="fetchMiningStats()">Go</button>
-    <div class="spinner-container">
-        <div id="loading-spinner" class="spinner">
-            <!-- Quadruple the symbols -->
-            <span>*</span><span>~</span><span>*</span><span>~</span><span>*</span><span>~</span>
-            <span>*</span><span>~</span><span>*</span><span>~</span><span>*</span><span>~</span>
-            <span>*</span><span>~</span><span>*</span><span>~</span><span>*</span><span>~</span>
-            <span>*</span><span>~</span><span>*</span><span>~</span><span>*</span><span>~</span>
-            <span>*</span><span>~</span><span>*</span><span>~</span><span>*</span><span>~</span>
-            <span>*</span><span>~</span><span>*</span><span>~</span><span>*</span><span>~</span>
-        </div>
-    </div>
-    <div id="mining-stats"></div>
+    
 
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
@@ -323,4 +308,3 @@
         }
     </script>
 </body>
-</html>
