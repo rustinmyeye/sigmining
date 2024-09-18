@@ -1,24 +1,29 @@
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title></title>
- <style>
+    <title>Mining Stats</title>
+    <style>
         body {
             background-color: black;
             color: white;
-            font-family: monospace; /* Terminal-like font */
+            font-family: 'Courier New', Courier, monospace; /* Terminal-like font */
             margin: 0;
             padding: 0;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
 
         #title {
             margin-top: 20px;
             font-size: 18px;
-            white-space: pre;
-            font-family: monospace; /* Terminal-like font */
             color: amber;
+            white-space: pre;
         }
 
         #input-title {
@@ -42,6 +47,7 @@
             padding: 5px 10px;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -64,14 +70,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: scroll 15s linear infinite; /* Adjusted duration for smoother scroll */
+            animation: scroll 15s linear infinite;
         }
 
         .spinner span {
             display: inline-block;
             margin: 0 2px;
-            font-size: 24px; /* Adjust size for better visibility */
-            color: amber; /* Set color to amber */
+            font-size: 24px;
+            color: amber;
             opacity: 1;
             animation: flicker 0.1s infinite alternate;
         }
@@ -89,26 +95,29 @@
         #mining-stats {
             margin-top: 20px;
         }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="title">
- ___ ___ ___ ___  ___   ___  _    
-/ __|_ _/ __| _ \/ _ \ / _ \| |   
-\__ \| | (_ |  _/ (_) | (_) | |__ 
-|___/___\___|_|  \___/ \___/|____|
-                                   
-    
+        ___ ___ ___ ___  ___   ___  _    
+        / __|_ _/ __| _ \/ _ \ / _ \| |   
+        \__ \| | (_ |  _/ (_) | (_) | |__ 
+        |___/___\___|_|  \___/ \___/|____|
+    </div>
 
-   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-<body>
     <div id="input-title">Enter your worker name or wallet address below:</div>
-    <input type="text" id="wallet-input" placeholder="Enter wallet address or worker name" style="color: black;">
+    <input type="text" id="wallet-input" placeholder="Enter wallet address or worker name">
     <button onclick="fetchMiningStats()">Go</button>
     <div id="mining-stats"></div>
     <div id="loading-spinner" class="spinner" style="display: none;"></div>
 
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
         let isChartVisible = false;
 
@@ -296,7 +305,6 @@
                         hoverlabel: { namelength: 0, bgcolor: isDarkMode ? '#333' : '#ccc' }
                     };
 
-                    // Format y-axis ticks at 100 MH intervals
                     const maxHashrate = Math.max(...data.map(item => Math.max(...Object.values(item.workers).map(w => w.hashrate || 0))));
                     const yTickInterval = 100000000; // 100 MH
                     layout.yaxis.tickvals = Array.from({length: Math.floor(maxHashrate / yTickInterval) + 1}, (_, i) => i * yTickInterval);
@@ -308,3 +316,4 @@
         }
     </script>
 </body>
+
