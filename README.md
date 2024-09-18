@@ -103,7 +103,7 @@
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <body>
-    <div id="input-title">Enter your worker name or wallet address below, or visit one of the dashboards linked beneath.</div>
+    <div id="input-title">Enter your worker name or wallet address below:</div>
     <input type="text" id="wallet-input" placeholder="Enter wallet address or worker name" style="color: black;">
     <button onclick="fetchMiningStats()">Go</button>
     <div id="mining-stats"></div>
